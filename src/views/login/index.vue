@@ -29,6 +29,9 @@
         <van-button block type="info" native-type="submit">登录</van-button>
       </div>
     </van-form>
+    <div>
+      <p>还没有账号，快去注册~</p>
+    </div>
   </div>
 </template>
 
@@ -38,7 +41,8 @@ export default {
   data () {
     return {
       username: '',
-      password: ''
+      password: '',
+      login: false
     }
   },
 
@@ -49,6 +53,15 @@ export default {
     async onSubmit () {
       try {
         const res = await login(this.username, this.password)
+        this.$toast.loading({
+          message: '加载中...',
+          forbidClick: true
+        })
+        this.$toast.success(res.data.description)
+        localStorage.setItem('token', res.data.body.token)
+        this.$router.push({
+          path: '/layout/my'
+        })
         console.log(res)
       } catch (e) {
         console.log('错误', e)
@@ -60,6 +73,13 @@ export default {
 
 <style lang="less" scoped>
 .login {
+  div {
+    text-align: center;
+    p {
+      font-size: 14px;
+      color: #666;
+    }
+  }
   :deep(.van-nav-bar__content) {
     background-color: #21b97a;
   }

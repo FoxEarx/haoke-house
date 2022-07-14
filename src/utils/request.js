@@ -1,7 +1,5 @@
 import axios from 'axios'
-const request = axios.create({
-  baseURL: 'http://liufusong.top:8080',
-  method: 'POST',
-  timeout: 4000
+export const request = axios.create({
+  baseURL: 'http://liufusong.top:8080'
+  // timeout: 10000
 })
-export default request
