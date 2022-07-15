@@ -57,12 +57,16 @@ export default {
           message: '加载中...',
           forbidClick: true
         })
+        if (res.data.status !== 200) {
+          return this.$toast.fail(res.data.description)
+        }
+        console.log('登录数据', res)
+        localStorage.setItem('hkTOKEN', res.data.body.token)
+        this.$store.commit('setUser', res.data.body.token)
         this.$toast.success(res.data.description)
-        localStorage.setItem('token', res.data.body.token)
         this.$router.push({
           path: '/layout/my'
         })
-        console.log(res)
       } catch (e) {
         console.log('错误', e)
       }

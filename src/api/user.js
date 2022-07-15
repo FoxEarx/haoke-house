@@ -7,7 +7,6 @@ export const login = (username, password) => {
   })
 }
 export const userInfo = (token) => {
-  console.log(token)
   return request({
     url: '/user',
     method: 'GET',

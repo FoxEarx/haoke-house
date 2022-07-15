@@ -1,20 +1,28 @@
 <template>
   <div class="mybox">
     <div class="box">
-      <img class="mainimg" src="./img/mybgc.png" alt="" />
+      <img
+        class="mainimg"
+        :src="`http://liufusong.top:8080${userData.avatar}` || imgBgc"
+        alt=""
+      />
       <div class="login">
         <div class="touxiang">
-          <img src="./img/avatar.png" alt="" />
+          <img
+            :src="`http://liufusong.top:8080${userData.avatar}` || imgSrc"
+            alt=""
+          />
         </div>
-        <p>游客</p>
-        <van-button type="primary" size="small" @click="login"
-          >去登陆</van-button
-        >
+        <p>{{ userData.nickname || '游客' }}</p>
+        <van-button type="primary" size="small" @click="login">{{
+          userData === [] ? '去登陆' : '退出'
+        }}</van-button>
+        <p v-show="userData !== []" class="bjzl">编辑个人资料➡</p>
       </div>
     </div>
     <div class="list">
       <ul>
-        <li>
+        <li @click="toCollection">
           <div>
             <span class="iconfont icon-shoucang"></span>
             <p>我的收藏</p>
@@ -60,21 +68,34 @@
 
 <script>
 import { userInfo } from '@/api/user'
-
+import imgSrc from './img/avatar.png'
+import imgBgc from './img/mybgc.png'
 export default {
   data () {
     return {
-      token: ''
+      imgBgc,
+      imgSrc,
+      userData: []
     }
   },
   async created () {
-    const res = await userInfo(localStorage.getItem('token'))
+    const res = await userInfo(this.$store.state.user)
+    if (res.data.status !== 200) {
+      return this.$router.push('/login')
+    }
+    this.userData = res.data.body
     console.log(res)
   },
   methods: {
     login () {
       this.$router.push({
         path: '/login'
+      })
+      this.userData = []
+    },
+    toCollection () {
+      this.$router.push({
+        path: '/mycollection'
       })
     }
   }
@@ -88,12 +109,14 @@ export default {
 .mybox {
   .box {
     height: 310px;
+    .mainimg {
+      width: 100%;
+      overflow: hidden;
+      // height: 191px;
+    }
   }
   position: relative;
-  .mainimg {
-    width: 100%;
-    height: 191px;
-  }
+
   .login {
     position: absolute;
     top: 90px;
@@ -134,6 +157,11 @@ export default {
       width: 69px;
       height: 30px;
     }
+    .bjzl {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #999;
+    }
   }
   .list {
     padding-top: 20px;
@@ -141,6 +169,9 @@ export default {
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap;
+      li:active {
+        background-color: rgb(187, 182, 182);
+      }
       li {
         height: 95px;
         width: 125px;

@@ -6,7 +6,7 @@ const routes = [
   // 根目录跳转
   {
     path: '/',
-    redirect: '/layout'
+    redirect: '/layout/home'
   },
   // 登录页面路由
   {
@@ -35,6 +35,11 @@ const routes = [
         component: () => import('@/views/Home')
       }
     ]
+  },
+  // 我的收藏
+  {
+    path: '/mycollection',
+    component: () => import('@/views/MyCollection')
   }
 ]
 
