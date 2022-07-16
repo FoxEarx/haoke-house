@@ -84,11 +84,11 @@ export default {
     return {
       imgBgc,
       imgSrc,
-      userData: []
+      userData: {}
     }
   },
   async created () {
-    const res = await userInfo(this.$store.state.user.token)
+    const res = await userInfo()
     // if (res.data.status !== 200) {
     //   return this.$router.push('/login')
     // }
@@ -118,9 +118,15 @@ export default {
       })
     },
     toCollection () {
-      this.$router.push({
-        path: '/mycollection'
-      })
+      if (this.$store.state.user.token) {
+        this.$router.push({
+          path: '/mycollection'
+        })
+      } else {
+        this.$router.push({
+          path: '/login'
+        })
+      }
     }
   }
 }

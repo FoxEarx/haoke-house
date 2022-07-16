@@ -6,10 +6,19 @@ export const login = (username, password) => {
     data: { username, password }
   })
 }
-export const userInfo = (token) => {
+export const userInfo = () => {
   return request({
-    url: '/user',
-    method: 'GET',
-    headers: { authorization: token }
+    url: '/user'
+  })
+}
+export const userCollection = () => {
+  return request({
+    url: '/user/favorites'
+  })
+}
+export const getHouse = (id) => {
+  return request({
+    url: `/houses/${id}`,
+    path: { id: id }
   })
 }

@@ -40,6 +40,11 @@ const routes = [
   {
     path: '/mycollection',
     component: () => import('@/views/MyCollection')
+  },
+  // 房源信息
+  {
+    path: '/detail',
+    component: () => import('@/views/House')
   }
 ]
 
