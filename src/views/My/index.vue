@@ -3,21 +3,23 @@
     <div class="box">
       <img
         class="mainimg"
-        :src="`http://liufusong.top:8080${userData.avatar}` || imgBgc"
+        :src="isLogin ? `http://liufusong.top:8080${userData.avatar}` : imgBgc"
         alt=""
       />
       <div class="login">
         <div class="touxiang">
           <img
-            :src="`http://liufusong.top:8080${userData.avatar}` || imgSrc"
+            :src="
+              isLogin ? `http://liufusong.top:8080${userData.avatar}` : imgSrc
+            "
             alt=""
           />
         </div>
-        <p>{{ userData.nickname || '游客' }}</p>
+        <p>{{ isLogin ? userData.nickname : '游客' }}</p>
         <van-button type="primary" size="small" @click="login">{{
-          userData === [] ? '去登陆' : '退出'
+          isLogin ? '退出' : '去登陆'
         }}</van-button>
-        <p v-show="userData !== []" class="bjzl">编辑个人资料➡</p>
+        <p v-show="isLogin" class="bjzl">编辑个人资料➡</p>
       </div>
     </div>
     <div class="list">
@@ -70,7 +72,14 @@
 import { userInfo } from '@/api/user'
 import imgSrc from './img/avatar.png'
 import imgBgc from './img/mybgc.png'
+import { removeToken } from '@/utils'
+
 export default {
+  computed: {
+    isLogin () {
+      return !!this.$store.state.user.token
+    }
+  },
   data () {
     return {
       imgBgc,
@@ -79,19 +88,34 @@ export default {
     }
   },
   async created () {
-    const res = await userInfo(this.$store.state.user)
-    if (res.data.status !== 200) {
-      return this.$router.push('/login')
-    }
+    const res = await userInfo(this.$store.state.user.token)
+    // if (res.data.status !== 200) {
+    //   return this.$router.push('/login')
+    // }
     this.userData = res.data.body
-    console.log(res)
+    console.log('1', res)
   },
   methods: {
     login () {
+      if (this.isLogin) {
+        // this.userData = []
+        this.$dialog
+          .confirm({
+            title: '标题',
+            message: '弹窗内容'
+          })
+          .then(() => {
+            removeToken()
+            this.$store.commit('setUser', {})
+          })
+          .catch(() => {
+            // on cancel
+          })
+        return
+      }
       this.$router.push({
         path: '/login'
       })
-      this.userData = []
     },
     toCollection () {
       this.$router.push({
@@ -108,10 +132,12 @@ export default {
 }
 .mybox {
   .box {
+    width: 100%;
     height: 310px;
+    overflow: hidden;
     .mainimg {
       width: 100%;
-      overflow: hidden;
+
       // height: 191px;
     }
   }

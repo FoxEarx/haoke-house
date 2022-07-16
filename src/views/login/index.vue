@@ -51,23 +51,25 @@ export default {
       this.$router.back()
     },
     async onSubmit () {
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        duration: 0
+      })
       try {
         const res = await login(this.username, this.password)
-        this.$toast.loading({
-          message: '加载中...',
-          forbidClick: true
-        })
         if (res.data.status !== 200) {
           return this.$toast.fail(res.data.description)
         }
         console.log('登录数据', res)
-        localStorage.setItem('hkTOKEN', res.data.body.token)
-        this.$store.commit('setUser', res.data.body.token)
+        localStorage.setItem('hkTOKEN', res.data.body)
+        this.$store.commit('setUser', res.data.body)
         this.$toast.success(res.data.description)
         this.$router.push({
           path: '/layout/my'
         })
       } catch (e) {
+        this.$toast.fail('登陆失败')
         console.log('错误', e)
       }
     }
