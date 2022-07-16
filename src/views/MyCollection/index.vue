@@ -1,28 +1,13 @@
 <template>
   <div>
     <van-nav-bar title="收藏列表" left-arrow @click-left="onClickLeft" />
-    <ul>
-      <li
-        v-for="item in userCollectionList"
-        :key="item.houseCode"
-        @click="toHouse(item.houseCode)"
-      >
-        <div class="img">
-          <img :src="`http://liufusong.top:8080${item.houseImg}`" alt="" />
-        </div>
-        <div class="rightBox">
-          <h4>{{ item.title }}</h4>
-          <p>{{ item.desc }}</p>
-          <span class="wz">{{ item.tags[0] }}</span>
-          <span class="money">{{ item.price }}<i>元/月</i></span>
-        </div>
-      </li>
-    </ul>
+    <List :arr="userCollectionList"></List>
   </div>
 </template>
 
 <script>
 import { userCollection } from '@/api/user'
+import List from '@/components/List'
 export default {
   data () {
     return {
@@ -50,20 +35,16 @@ export default {
         const res = await userCollection()
         this.userCollectionList = res.data.body
         console.log(this.userCollectionList)
-        console.log(res)
+        console.log('列表信息', res)
         this.$toast.clear() // 关闭加载
       } catch (e) {
         console.log(e)
         this.$toast.fail('请求列表失败')
       }
-    },
-    toHouse (id) {
-      console.log(id)
-      this.$router.push({
-        path: '/detail',
-        query: { id }
-      })
     }
+  },
+  components: {
+    List
   }
 }
 </script>

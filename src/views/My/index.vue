@@ -93,7 +93,7 @@ export default {
     //   return this.$router.push('/login')
     // }
     this.userData = res.data.body
-    console.log('1', res)
+    console.log('用户信息', res)
   },
   methods: {
     login () {

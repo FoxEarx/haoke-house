@@ -1,29 +1,49 @@
 <template>
   <div class="box">
-    <van-nav-bar left-arrow @click-left="onClickLeft" />
-    <div class="houseimg"><img src="" alt="" /></div>
+    <van-nav-bar
+      left-arrow
+      @click-left="onClickLeft"
+      :title="house.community"
+    />
+    <div class="houseimg">
+      <van-swipe
+        :height="250"
+        class="my-swipe"
+        :autoplay="3000"
+        indicator-color="white"
+        :loop="false"
+      >
+        <van-swipe-item v-for="(item, index) in house.houseImg" :key="index"
+          ><img :src="`http://liufusong.top:8080${item}`" alt=""
+        /></van-swipe-item>
+      </van-swipe>
+    </div>
     <div class="houseinfo">
-      <h3>1</h3>
-      <span class="wz">123</span>
+      <h3>{{ house.title }}</h3>
+      <span class="wz">{{ house.tags[0] }}</span>
       <div class="infomain">
         <div class="jj">
-          <div class="sum">123</div>
+          <div class="sum">{{ house.price }}</div>
           <i>/月</i>
           <div class="zhushi">租金</div>
         </div>
         <div class="jj">
-          <div class="sum">四方</div>
-          <div class="zhushi">租金</div>
+          <div class="sum">{{ house.roomType }}</div>
+          <div class="zhushi">房型</div>
         </div>
         <div class="jj">
-          <div class="sum">123</div>
-          <div class="zhushi">租金</div>
+          <div class="sum">{{ house.size }}平方米</div>
+          <div class="zhushi">面积</div>
         </div>
       </div>
       <div class="lx">
         <div>装修:<span>精装</span></div>
-        <div>朝向:<span>北</span></div>
-        <div>楼层:<span>高层楼</span></div>
+        <div>
+          朝向:<span>{{ house.oriented[0] }}</span>
+        </div>
+        <div>
+          楼层:<span>{{ house.floor }}</span>
+        </div>
         <div>类型:<span>普通住宅</span></div>
       </div>
     </div>
@@ -36,6 +56,7 @@
       <div class="some">
         <p>房屋配套</p>
       </div>
+      <div class="root"></div>
     </div>
   </div>
 </template>
@@ -45,12 +66,12 @@ import { getHouse } from '@/api/user'
 export default {
   data () {
     return {
-      house: []
+      house: {}
     }
   },
   created () {
-    // console.log(this.$route)
     this.getHouse()
+    // console.log(this.$route)
   },
   methods: {
     // 获取房屋具体信息
@@ -78,6 +99,10 @@ export default {
   margin: 0;
   font-style: normal;
 }
+:deep(.van-nav-bar__title) {
+  color: #fff;
+  font-size: 18px;
+}
 .box {
   background-color: #f6f5f6;
 }
@@ -92,6 +117,17 @@ export default {
   width: 100%;
   height: 250px;
   background-color: #f6f5f6;
+  .my-swipe .van-swipe-item {
+    color: #fff;
+    font-size: 20px;
+    line-height: 150px;
+    text-align: center;
+    background-color: #39a9ed;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 .houseinfo {
   background-color: #fff;
@@ -100,7 +136,7 @@ export default {
     font-weight: 400;
     font-size: 16px;
     color: #333;
-    margin: 16px 0;
+    margin: 16px 0 5px 0;
   }
   .wz {
     display: inline-block;
@@ -112,6 +148,7 @@ export default {
     line-height: 12px;
     color: #39becd;
     background: #e1f5f8;
+    // margin-top: -5px;
   }
   .infomain {
     display: flex;
@@ -182,9 +219,14 @@ export default {
     background-color: #fff;
     font-weight: 600;
     font-size: 15px;
-    margin: 0 10px 10px 10px;
-    padding: 15px 0;
+    // margin: 0 10px 10px 10px;
+    padding: 15px 10px;
     border-bottom: 1px solid #cecece;
+  }
+  .root {
+    height: 142px;
+    padding: 15px 10px;
+    background-color: #fff;
   }
 }
 </style>
