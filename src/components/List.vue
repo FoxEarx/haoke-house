@@ -30,6 +30,7 @@ export default {
   methods: {
     toHouse (id) {
       console.log(id)
+      localStorage.setItem('houseCode', id)
       this.$router.push({
         path: '/detail',
         query: { id }

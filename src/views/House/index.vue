@@ -58,16 +58,24 @@
       </div>
       <div class="map"><img src="" alt="" /></div>
       <div class="some">
-        <p>房屋配套</p>
+        <p class="some_p">房屋配套</p>
         <div class="root">
           <ul>
             <li v-for="(item, index) in house.supporting" :key="index">
-              <span>123</span>
+              <span :class="`iconfont ${iconfont(item)}`"></span>
               <p>{{ house.supporting && house.supporting[index] }}</p>
             </li>
           </ul>
         </div>
       </div>
+    </div>
+    <!-- 房主描述 -->
+    <div class="describe">
+      <p class="describe_p">房源概况</p>
+    </div>
+    <!-- 猜你喜欢 -->
+    <div class="describe">
+      <p class="describe_p">猜你喜欢</p>
     </div>
     <!-- 底部导航 -->
     <div class="tabbar">
@@ -88,7 +96,7 @@ export default {
   },
   created () {
     this.getHouse()
-    // console.log(this.$route)
+    console.log(this.$route)
   },
   methods: {
     // 获取房屋具体信息
@@ -104,6 +112,30 @@ export default {
     },
     onClickLeft () {
       this.$router.back()
+    },
+    iconfont (item) {
+      switch (item) {
+        case '衣柜':
+          return 'icon-yigui'
+        case '洗衣机':
+          return 'icon-xiyiji'
+        case '空调':
+          return 'icon-kongtiao'
+        case '沙发':
+          return 'icon-shafa'
+        case '暖气':
+          return 'icon-shuinuanqigongcheng'
+        case '天然气':
+          return 'icon-meiqitianranqi'
+        case '电视':
+          return 'icon-dianshi'
+        case '热水器':
+          return 'icon-yinshuiji-'
+        case '冰箱':
+          return 'icon-bingxiang'
+        case '宽带':
+          return 'icon-kuandai'
+      }
     }
   }
 }
@@ -237,9 +269,12 @@ export default {
     background-color: #fff;
     font-weight: 600;
     font-size: 15px;
-    // margin: 0 10px 10px 10px;
+    margin-bottom: 10px;
     padding: 15px 10px;
-    border-bottom: 1px solid #cecece;
+    .some_p {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #cecece;
+    }
   }
   .root {
     background-color: #fff;
@@ -255,12 +290,27 @@ export default {
         color: #333333;
         font-style: 23px;
         font-weight: normal;
+        .iconfont {
+          font-size: 23px;
+        }
         p {
           height: 28px;
           line-height: 28px;
         }
       }
     }
+  }
+}
+.describe {
+  margin: 10px 0;
+  padding: 10px;
+  line-height: 150%;
+  background: #fff;
+  font-size: 15px;
+  .describe_p {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #cecece;
+    font-weight: 900;
   }
 }
 .tabbar {
