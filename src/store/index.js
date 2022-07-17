@@ -5,13 +5,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: getToken() || {}
+    user: getToken() || {},
+    houseCode: ''
   },
 
   mutations: {
     setUser (state, payload) {
       state.user = payload
       setToken(payload)
+    },
+    setHouseCode (state, payload) {
+      state.houseCode = payload
     }
   }
 })

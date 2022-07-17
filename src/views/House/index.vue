@@ -1,10 +1,12 @@
 <template>
   <div class="box">
+    <!-- navbar -->
     <van-nav-bar
       left-arrow
       @click-left="onClickLeft"
       :title="house.community"
     />
+    <!-- 房屋图片 -->
     <div class="houseimg">
       <van-swipe
         :height="250"
@@ -18,9 +20,10 @@
         /></van-swipe-item>
       </van-swipe>
     </div>
+    <!-- 房屋信息 -->
     <div class="houseinfo">
       <h3>{{ house.title }}</h3>
-      <span class="wz">{{ house.tags[0] }}</span>
+      <span class="wz">{{ house.tags && house.tags[0] }}</span>
       <div class="infomain">
         <div class="jj">
           <div class="sum">{{ house.price }}</div>
@@ -39,7 +42,7 @@
       <div class="lx">
         <div>装修:<span>精装</span></div>
         <div>
-          朝向:<span>{{ house.oriented[0] }}</span>
+          朝向:<span>{{ house.oriented && house.oriented[0] }}</span>
         </div>
         <div>
           楼层:<span>{{ house.floor }}</span>
@@ -47,6 +50,7 @@
         <div>类型:<span>普通住宅</span></div>
       </div>
     </div>
+    <!-- 房屋信息 -->
     <div class="location">
       <div class="name">
         <p>小区：</p>
@@ -55,8 +59,21 @@
       <div class="map"><img src="" alt="" /></div>
       <div class="some">
         <p>房屋配套</p>
+        <div class="root">
+          <ul>
+            <li v-for="(item, index) in house.supporting" :key="index">
+              <span>123</span>
+              <p>{{ house.supporting && house.supporting[index] }}</p>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="root"></div>
+    </div>
+    <!-- 底部导航 -->
+    <div class="tabbar">
+      <div><span class="iconfont icon-shoucang">收藏</span></div>
+      <div class="tabbar_middle">在线咨询</div>
+      <div class="tabbar_bottom">电话预约</div>
     </div>
   </div>
 </template>
@@ -105,6 +122,7 @@ export default {
 }
 .box {
   background-color: #f6f5f6;
+  margin-bottom: 50px;
 }
 :deep(.van-nav-bar__content) {
   background-color: #21b97a;
@@ -224,9 +242,53 @@ export default {
     border-bottom: 1px solid #cecece;
   }
   .root {
-    height: 142px;
-    padding: 15px 10px;
     background-color: #fff;
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      li {
+        width: 20%;
+        height: 52px;
+        margin: 10px 0;
+        padding-top: 8px;
+        text-align: center;
+        color: #333333;
+        font-style: 23px;
+        font-weight: normal;
+        p {
+          height: 28px;
+          line-height: 28px;
+        }
+      }
+    }
+  }
+}
+.tabbar {
+  display: flex;
+  border-top: 0.5px solid #cecece;
+  position: fixed;
+  height: 50px;
+  width: 100%;
+  bottom: 0;
+  line-height: 50px;
+  left: 0;
+  background-color: #fff;
+  font-size: 17px;
+  color: #999;
+  div {
+    flex: 1;
+    text-align: center;
+  }
+  .tabbar_middle {
+    border-left: 1px solid #cecece;
+    border-right: 1px solid #cecece;
+  }
+  .icon-shoucang {
+    font-size: 18px;
+  }
+  .tabbar_bottom {
+    background-color: #21b97a;
+    color: #fff;
   }
 }
 </style>

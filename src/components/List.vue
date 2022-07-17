@@ -55,7 +55,6 @@ li {
   img {
     width: 106px;
     height: 80px;
-    background-color: red;
   }
   .rightBox {
     flex: 1;
