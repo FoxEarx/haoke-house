@@ -79,7 +79,12 @@
     </div>
     <!-- 底部导航 -->
     <div class="tabbar">
-      <div><span class="iconfont icon-shoucang">收藏</span></div>
+      <div @click="changeCollection">
+        <span
+          :class="state ? 'iconfont icon-shoucang1' : 'iconfont icon-shoucang'"
+        ></span
+        >收藏
+      </div>
       <div class="tabbar_middle">在线咨询</div>
       <div class="tabbar_bottom">电话预约</div>
     </div>
@@ -87,32 +92,50 @@
 </template>
 
 <script>
-import { getHouse } from '@/api/user'
+import {
+  getHouse,
+  isCollection,
+  addCollection,
+  delCollection
+} from '@/api/user'
+
 export default {
   data () {
     return {
-      house: {}
+      house: {},
+      state: ''
     }
   },
   created () {
     this.getHouse()
-    console.log(this.$route)
+    this.isCollection()
+    // console.log(this.$route)
   },
   methods: {
     // 获取房屋具体信息
     async getHouse () {
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        duration: 0
+      })
       try {
         const res = await getHouse(this.$route.query.id)
         this.house = res.data.body
-        console.log(this.house)
+        console.log('当前房屋信息', this.house)
       } catch (error) {
         this.$toast.fail('请重新获取房屋信息')
         console.log(error)
+      } finally {
+        this.$toast.clear()
       }
     },
+    // 返回上一层
     onClickLeft () {
+      this.$toast.clear()
       this.$router.back()
     },
+    // 字体图标匹配
     iconfont (item) {
       switch (item) {
         case '衣柜':
@@ -135,6 +158,35 @@ export default {
           return 'icon-bingxiang'
         case '宽带':
           return 'icon-kuandai'
+      }
+    },
+    // 房屋收藏状态
+    async isCollection () {
+      try {
+        const { data } = await isCollection(this.$store.state.houseCode)
+        console.log('是否收藏', data)
+        this.state = data.body.isFavorite
+      } catch (error) {
+        this.$toast.fail('查询收藏状态失败，请刷新')
+      }
+    },
+    // 改变房屋收藏状态
+    async changeCollection () {
+      // 如果已收藏则删除收藏 否则添加收藏
+      try {
+        if (this.state) {
+          const res = await delCollection(this.$store.state.houseCode)
+          console.log('删除房屋收藏', res)
+          this.$toast.success('删除收藏成功')
+          this.isCollection()
+        } else {
+          const res = await addCollection(this.$store.state.houseCode)
+          console.log('添加房屋收藏', res)
+          this.$toast.success('添加收藏成功')
+          this.isCollection()
+        }
+      } catch (error) {
+        this.$toast.fail('更新状态失败请重试')
       }
     }
   }
@@ -328,13 +380,17 @@ export default {
   div {
     flex: 1;
     text-align: center;
+    font-size: 18px;
   }
   .tabbar_middle {
     border-left: 1px solid #cecece;
     border-right: 1px solid #cecece;
   }
-  .icon-shoucang {
+  .iconfont {
     font-size: 18px;
+  }
+  .icon-shoucang1 {
+    color: #ff4f00;
   }
   .tabbar_bottom {
     background-color: #21b97a;

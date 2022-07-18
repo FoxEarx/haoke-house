@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { getToken, setToken } from '@/utils'
+import { getToken, setToken, getHouseCode, setHouseCode } from '@/utils'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     user: getToken() || {},
-    houseCode: ''
+    houseCode: getHouseCode() || {}
   },
 
   mutations: {
@@ -16,6 +16,7 @@ export default new Vuex.Store({
     },
     setHouseCode (state, payload) {
       state.houseCode = payload
+      setHouseCode(payload)
     }
   }
 })

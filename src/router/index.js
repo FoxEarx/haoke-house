@@ -45,6 +45,11 @@ const routes = [
   {
     path: '/detail',
     component: () => import('@/views/House')
+  },
+  // 我的出租
+  {
+    path: '/rent',
+    component: () => import('@/views/MyRent')
   }
 ]
 

@@ -30,7 +30,7 @@
             <p>我的收藏</p>
           </div>
         </li>
-        <li>
+        <li @click="toRent">
           <div>
             <span class="iconfont icon-shouye"></span>
             <p>我的出租</p>
@@ -121,6 +121,17 @@ export default {
       if (this.$store.state.user.token) {
         this.$router.push({
           path: '/mycollection'
+        })
+      } else {
+        this.$router.push({
+          path: '/login'
+        })
+      }
+    },
+    toRent () {
+      if (this.$store.state.user.token) {
+        this.$router.push({
+          path: '/rent'
         })
       } else {
         this.$router.push({

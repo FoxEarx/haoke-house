@@ -24,13 +24,15 @@
 export default {
   props: {
     arr: {
-      type: Array
+      type: Array,
+      required: true
     }
   },
   methods: {
     toHouse (id) {
       console.log(id)
       localStorage.setItem('houseCode', id)
+      this.$store.commit('setHouseCode', id)
       this.$router.push({
         path: '/detail',
         query: { id }
@@ -76,7 +78,7 @@ li {
       display: block;
     }
     .wz {
-      width: 46px;
+      width: 60px;
       height: 20px;
       font-size: 12px;
       text-align: center;

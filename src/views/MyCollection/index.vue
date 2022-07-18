@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar title="收藏列表" left-arrow @click-left="onClickLeft" />
+    <Nav :nav="'收藏列表'"></Nav>
     <List :arr="userCollectionList"></List>
   </div>
 </template>
@@ -8,6 +8,8 @@
 <script>
 import { userCollection } from '@/api/user'
 import List from '@/components/List'
+import Nav from '@/components/navbar'
+
 export default {
   data () {
     return {
@@ -21,16 +23,16 @@ export default {
   },
   methods: {
     // 返回上一层
-    onClickLeft () {
-      this.$router.back()
-    },
+    // onClickLeft () {
+    //   this.$router.back()
+    // },
     // 获取列表数据
     async getuserCollection () {
-      // this.toast.loading({
-      //   message: '加载中...',
-      //   forbidClick: true
-      //   // duration: 0
-      // })
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        duration: 0
+      })
       try {
         const res = await userCollection()
         this.userCollectionList = res.data.body
@@ -40,11 +42,14 @@ export default {
       } catch (e) {
         console.log(e)
         this.$toast.fail('请求列表失败')
+      } finally {
+        this.$toast.clear()
       }
     }
   },
   components: {
-    List
+    List,
+    Nav
   }
 }
 </script>
