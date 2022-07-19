@@ -13,6 +13,7 @@
           ><a href="javascript:;"><img src="./img/3.png" alt="" /></a
         ></van-swipe-item>
       </van-swipe>
+      <!-- 搜索框 -->
       <van-search
         show-action
         v-model="value"
@@ -23,9 +24,13 @@
           <span class="iconfont icon-ditu1"></span>
         </template>
         <template #label>
-          <div class="sousuo">北京 ▼</div>
+          <div class="sousuo" @click="toGityList">
+            {{ city }}
+            ▼
+          </div>
         </template>
       </van-search>
+      <!-- nav -->
       <div class="nav">
         <div>
           <span class="iconfont icon-zufang1"></span>
@@ -44,6 +49,16 @@
           <h3>去出租</h3>
         </div>
       </div>
+      <div class="group">
+        <h3>租房小组</h3>
+        <span>更多</span>
+      </div>
+      <van-grid column-num="2" gutter="10px" direction="horizontal">
+        <van-grid-item icon="photo-o" text="文字" />
+        <van-grid-item icon="photo-o" text="文字" />
+        <van-grid-item icon="photo-o" text="文字" />
+        <van-grid-item icon="photo-o" text="文字" />
+      </van-grid>
     </div>
   </div>
 </template>
@@ -52,7 +67,8 @@
 export default {
   data () {
     return {
-      value: ''
+      value: '',
+      city: '北京'
     }
   },
   methods: {
@@ -61,6 +77,16 @@ export default {
     },
     onCancel () {
       this.$toast('取消')
+    },
+    toGityList () {
+      this.$router.push({
+        path: '/city'
+      })
+    }
+  },
+  created () {
+    if (localStorage.getItem('CITY')) {
+      this.city = JSON.parse(localStorage.getItem('CITY'))
     }
   }
 }
@@ -130,6 +156,22 @@ export default {
           font-size: 35px;
           color: #05b069;
         }
+      }
+    }
+    .group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 10px 15px 10px;
+      font-size: 15px;
+      height: 25px;
+      h3 {
+        color: #333;
+        font-size: 15px;
+      }
+      span {
+        font-size: 14px;
+        color: #787d82;
       }
     }
   }

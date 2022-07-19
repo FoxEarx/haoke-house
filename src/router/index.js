@@ -50,6 +50,11 @@ const routes = [
   {
     path: '/rent',
     component: () => import('@/views/MyRent')
+  },
+  // 城市列表
+  {
+    path: '/city',
+    component: () => import('@/views/CityList')
   }
 ]
 
