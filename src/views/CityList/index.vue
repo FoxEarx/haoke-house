@@ -1,29 +1,28 @@
 <template>
   <div>
     <Nav :nav="'城市列表'"></Nav>
-    <van-index-bar :index-list="indexList" highlight-color="green">
+    <van-index-bar :index-list="indexList" select highlight-color="green">
       <!-- 当前城市 -->
-      <van-index-anchor>当前城市</van-index-anchor>
+      <van-index-anchor index="#">当前城市</van-index-anchor>
       <van-cell :title="nowCity" />
 
       <!-- 热门城市 -->
-      <van-index-anchor>热门城市</van-index-anchor>
+      <van-index-anchor index="热">热门城市</van-index-anchor>
       <van-cell
         :title="item.label"
         v-for="item in hotCityList"
         :key="item.value"
-        @click="clickCity(item.label)"
+        @click="clickCity(item)"
       />
-
       <!-- 所有城市 -->
       <div v-for="(item, index) in indexList1" :key="index">
-        <van-index-anchor>{{ item }}</van-index-anchor>
+        <van-index-anchor :index="item">{{ item }}</van-index-anchor>
         <van-cell
           :title="ele.label"
           v-for="(ele, index) in cityList"
           :key="index"
           v-show="ele.short.substring(0, 1) === item.toLowerCase()"
-          @click="clickCity(ele.label)"
+          @click="clickCity(ele)"
         />
       </div>
     </van-index-bar>
@@ -32,7 +31,7 @@
 
 <script>
 import Nav from '@/components/navbar'
-import { getCityList, getHotCityList, getCityHouse } from '@/api/'
+import { getCityList, getHotCityList } from '@/api/'
 export default {
   data () {
     return {
@@ -126,17 +125,16 @@ export default {
       this.$toast.clear()
     },
     async clickCity (city) {
-      this.nowCity = city
-      localStorage.setItem('CITY', JSON.stringify(city))
+      this.nowCity = city.label
       // 城市房源信息
-      await getCityHouse(city)
-
+      this.$store.commit('setCity', city)
+      console.log(city)
       this.$router.go(-1)
     }
   },
   created () {
-    if (localStorage.getItem('CITY')) {
-      this.nowCity = JSON.parse(localStorage.getItem('CITY'))
+    if (this.$store.state.city.value) {
+      this.nowCity = this.$store.state.city.label
     }
     this.getCityList()
   }

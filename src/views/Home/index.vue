@@ -44,7 +44,7 @@
           <span class="iconfont icon-ditu"></span>
           <h3>地图找房</h3>
         </div>
-        <div>
+        <div @click="toRelease">
           <span class="iconfont icon-zufang"></span>
           <h3>去出租</h3>
         </div>
@@ -82,11 +82,14 @@ export default {
       this.$router.push({
         path: '/city'
       })
+    },
+    toRelease () {
+      this.$router.push('/release')
     }
   },
   created () {
-    if (localStorage.getItem('CITY')) {
-      this.city = JSON.parse(localStorage.getItem('CITY'))
+    if (this.$store.state.city.value) {
+      this.city = this.$store.state.city.label
     }
   }
 }

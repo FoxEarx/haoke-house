@@ -20,3 +20,10 @@ export const getCityHouse = (name) => {
     params: { name }
   })
 }
+// 查询房源数据
+export const getCityHouseInfo = (id) => {
+  return request({
+    url: '/area/map',
+    params: { id }
+  })
+}
