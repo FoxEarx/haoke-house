@@ -72,6 +72,8 @@
     <!-- 房主描述 -->
     <div class="describe">
       <p class="describe_p">房源概况</p>
+      <div></div>
+      <div>{{ house.description }}</div>
     </div>
     <!-- 猜你喜欢 -->
     <div class="describe">

@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9166438",
+      "name": "沙发",
+      "font_class": "shafa1",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "12707930",
+      "name": "家居控制-热水器",
+      "font_class": "jiajukongzhi-reshuiqi",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "15896532",
+      "name": "床",
+      "font_class": "chuang",
+      "unicode": "e7d0",
+      "unicode_decimal": 59344
+    },
+    {
       "icon_id": "3863069",
       "name": "收藏",
       "font_class": "shoucang1",
