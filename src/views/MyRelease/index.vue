@@ -6,7 +6,12 @@
         <!-- 房源信息 -->
         <van-cell title="房源信息" class="info" />
         <!-- 小区名称 -->
-        <van-cell title="小区名称" is-link value="请输入小区名" />
+        <van-cell
+          title="小区名称"
+          is-link
+          :value="$route.query.name || '请输入小区名'"
+          @click="toSearchcommunity"
+        />
         <!-- 租金 -->
         <van-cell value="￥/月">
           <template #title>
@@ -58,7 +63,6 @@
           title="所在楼层"
           v-model="confirmLC"
           is-link
-          value="请输入小区名"
           @click="LCshow = true"
         />
         <van-popup
@@ -96,7 +100,7 @@
         </van-popup>
         <van-cell title="房屋标题" class="biaoti" />
       </van-cell-group>
-      <div class="fwinfo">
+      <div>
         <van-field
           v-model="biaoti"
           rows="1"
@@ -114,16 +118,18 @@
       <van-cell title="房屋配置" />
       <van-grid :border="false" column-num="5">
         <van-grid-item
-          :text="item"
-          v-for="(item, index) in icon"
+          :text="item.label"
+          v-for="(item, index) in info.supporting"
           :key="index"
           :style="
-            housePZ.some((ele) => ele === item) ? 'color:#4cbd87' : 'color:#000'
+            housePZ.some((ele) => ele === item.label)
+              ? 'color:#4cbd87'
+              : 'color:#000'
           "
-          @click="housePZfn(item)"
+          @click="housePZfn(item.label)"
         >
           <template #icon>
-            <span :class="`iconfont ${iconfont(item)}`"></span>
+            <span :class="`iconfont ${iconfont(item.label)}`"></span>
           </template>
         </van-grid-item>
       </van-grid>
@@ -149,7 +155,6 @@ import { releaseHouseInfo, rental } from '@/api'
 export default {
   data () {
     return {
-      icon: [],
       info: [],
       housesize: '',
       confirmLC: '请选择',
@@ -180,7 +185,7 @@ export default {
       this.LCshow = false
       this.confirmLC = value
       this.LCvalue = this.info.floor[index].value
-      this.LCvalue = console.log(this.confirmLC)
+      console.log(this.LCvalue)
     },
     // 选择户型
     ChangeHX (value, index) {
@@ -194,6 +199,7 @@ export default {
       this.CXshow = false
       this.confirmCX = value
       this.CXvalue = this.info.oriented[index].value
+      console.log(this.CXvalue)
     },
     // 发布房源的应填数据
     async releaseHouseInfo () {
@@ -213,9 +219,6 @@ export default {
         }
         for (let i = 0; i < data.body.oriented.length; i++) {
           this.direction.push(data.body.oriented[i].label)
-        }
-        for (let i = 0; i < data.body.supporting.length; i++) {
-          this.icon.push(data.body.supporting[i].label)
         }
         console.log(this.info)
       } catch (error) {
@@ -257,30 +260,48 @@ export default {
           confirmButtonColor: '#108ee9',
           cancelButtonText: '放弃'
         })
-        .then(() => {
-          // on confirm
-        })
+        .then(() => {})
         .catch(() => {
           this.$router.go(-1)
         })
     },
     async rental () {
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        duration: 0
+      })
       try {
         const res = await rental({
-          title: '11', // 小区名称
+          title: this.biaoti, // 小区名称
           description: this.houseinfo, // 装修描述
-          houseImg: this.uploader, // 房屋图片
-          oriented: this.confirmCX, // 房子朝向
-          supporting: this.housePZ, // 房屋配置
+          houseImg: this.uploader.join('|'), // 房屋图片
+          oriented: this.CXvalue, // 房子朝向
+          supporting: this.housePZ.join('|'), // 房屋配置
           price: this.money, // 房屋价格
-          roomType: this.confirmHX, // 房屋类型
+          roomType: this.HXvalue, // 房屋类型
           size: this.housesize, // 房屋大小
-          floor: this.confirmLC, // 房屋层数
-          community: '11' // 所属社区
+          floor: this.LCvalue, // 房屋层数
+          community: this.$route.query.value // 所属社区
         })
+        this.$dialog
+          .confirm({
+            title: '提示',
+            message: '发布房源成功！！！！',
+            confirmButtonText: '继续发布',
+            confirmButtonColor: '#108ee9',
+            cancelButtonText: '去看看'
+          })
+          .then(() => {})
+          .catch(() => {
+            this.$router.push('/layout/search')
+          })
+        this.$toast.clear()
         console.log(res)
       } catch (error) {
         console.log(error)
+        this.$toast.clear()
+        this.$toast.fail('发布失败！！！')
       }
     },
     housePZfn (pz) {
@@ -289,6 +310,9 @@ export default {
       } else {
         this.housePZ.push(pz)
       }
+    },
+    toSearchcommunity () {
+      this.$router.push('/release/search')
     }
   },
   components: {
@@ -320,15 +344,8 @@ export default {
     display: inline-block;
   }
 }
-.fwinfo {
-  textarea {
-    border: transparent;
-    // padding-left: 30px;
-    padding-top: 10px;
-    font-size: 15px;
-    width: 371px;
-    height: 30px;
-  }
+.van-cell {
+  width: 100%;
 }
 .iconfont {
   font-size: 23px;

@@ -56,9 +56,15 @@ const routes = [
     path: '/city',
     component: () => import('@/views/CityList')
   },
+  // 房屋出租
   {
     path: '/release',
     component: () => import('@/views/MyRelease')
+  },
+  // 小区关键词查询
+  {
+    path: '/release/search',
+    component: () => import('@/views/MyRelease/search')
   }
 ]
 

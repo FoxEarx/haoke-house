@@ -14,7 +14,12 @@ export default new Vuex.Store({
   state: {
     user: getToken() || {},
     houseCode: getHouseCode() || {},
-    city: getCityinfo() || {}
+    city: getCityinfo() || {
+      label: '北京',
+      pinyin: 'beijing',
+      short: 'bj',
+      value: 'AREA|88cff55c-aaa4-e2e0'
+    }
   },
 
   mutations: {

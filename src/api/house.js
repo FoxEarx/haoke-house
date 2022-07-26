@@ -14,3 +14,18 @@ export const rental = (body) => {
     data: body
   })
 }
+// 小区关键词查询
+export const SearchCommunity = (body) => {
+  return request({
+    url: '/area/community',
+    params: body
+  })
+}
+//
+
+export const SearchHousecondition = (id) => {
+  return request({
+    url: '/houses/condition',
+    params: { id }
+  })
+}

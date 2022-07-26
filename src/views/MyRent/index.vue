@@ -1,10 +1,12 @@
 <template>
   <div>
-    <Nav :nav="'房屋管理'"></Nav>
-    <div v-if="HouseList.length === 0" class="nothing">
-      您还没有房源，<span>去发布房源</span> 吧~~~~
+    <div>
+      <Nav :nav="'房屋管理'"></Nav>
+      <div v-if="HouseList.length === 0" class="nothing">
+        您还没有房源，<span @click="toMyRelease">去发布房源</span> 吧~~~~
+      </div>
+      <List v-else :arr="HouseList"></List>
     </div>
-    <List v-else :arr="HouseList"></List>
   </div>
 </template>
 
@@ -40,6 +42,9 @@ export default {
       } finally {
         this.$toast.clear()
       }
+    },
+    toMyRelease () {
+      this.$router.push('/release')
     }
   },
   created () {

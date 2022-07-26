@@ -12,7 +12,7 @@ export default {
   methods: {
     onClickLeft () {
       this.$toast.clear()
-      this.$router.back()
+      this.$router.go(-1)
     }
   }
 }
